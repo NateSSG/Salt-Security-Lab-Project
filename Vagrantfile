@@ -11,7 +11,7 @@ Vagrant.configure("2") do |config|
     master.vm.network "private_network", ip: "192.168.56.10"
 
     master.vm.provider "virtualbox" do |vb|
-      vb.memory = 1024
+      vb.memory = 2048  # Increased for security tools
       vb.cpus = 1
     end
 
@@ -28,7 +28,6 @@ Vagrant.configure("2") do |config|
       sudo apt-get install -y salt-master
 
       # Configure master to auto-accept keys - SECURE VERSION
-      # Only auto-accept our specific minion by ID
       sudo sed -i '/auto_accept:/d' /etc/salt/master
       echo "auto_accept: True" | sudo tee -a /etc/salt/master
       
@@ -47,34 +46,29 @@ Vagrant.configure("2") do |config|
       sudo systemctl enable salt-master
       sudo systemctl start salt-master
 
-      # Create a simple test state
+      # Use YOUR actual Salt states from the project directory
+      echo "📁 Setting up your Salt states from project directory..."
+
+      # Create /srv/salt directory structure properly
       sudo mkdir -p /srv/salt
-      cat << EOF | sudo tee /srv/salt/top.sls
+      sudo chown -R salt:salt /srv/salt
+
+      # Copy your states to the master's salt directory
+      if [ -d /vagrant/salt ]; then
+        echo "✅ Found your Salt states in /vagrant/salt - deploying..."
+        sudo cp -r /vagrant/salt/* /srv/salt/
+        sudo chown -R salt:salt /srv/salt/
+        echo "📋 Deployed states:"
+        sudo find /srv/salt -type f -name "*.sls" | sudo xargs ls -la
+      else
+        echo "⚠️ No custom Salt states found, creating basic structure..."
+        # Create a basic top.sls as fallback
+        cat << EOF | sudo tee /srv/salt/top.sls
 base:
   '*':
-    - common
+    - sshd_port
 EOF
-
-      cat << EOF | sudo tee /srv/salt/common.sls
-common_packages:
-  pkg.installed:
-    - pkgs:
-      - curl
-      - vim
-      - htop
-      - tree
-
-create_salt_test_file:
-  file.managed:
-    - name: /tmp/salt-success.txt
-    - contents: |
-        Salt Stack is working correctly!
-        Master: salt-master
-        Minion: salt-minion
-        Project: Security Lab
-        Time: $(date)
-    - makedirs: True
-EOF
+      fi
 
       echo "✅ Salt Master installation completed"
     SHELL
