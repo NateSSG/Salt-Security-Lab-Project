@@ -1,4 +1,4 @@
-# 🛡️ Mini SIEM Saltstack Security Lab
+# 🛡️ Mini SIEM Saltstack Security Lab | Created By: Nathaniel Ssendagire & Janne Sormunen
 
 ## 🚀 Quick Start
     # Deploy the entire lab
@@ -166,6 +166,14 @@
 | htop/iotop  | System monitoring          | sudo htop                         |
 
 
-A group project where we made a mini SIEM log collector
+## 🚨 Emergency Commands
 
-A fully automated security monitoring infrastructure built with SaltStack and Vagrant. This lab provides enterprise-grade security tools for intrusion detection, log collection, and system monitoring
+    # Block an IP immediately
+    sudo ufw deny from IP_ADDRESS
+    
+    # Stop all services
+    sudo systemctl stop fail2ban filebeat ufw
+    
+    # Reset entire lab
+    vagrant destroy -f && vagrant up
+
