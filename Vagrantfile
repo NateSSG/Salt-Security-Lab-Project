@@ -28,7 +28,7 @@ Vagrant.configure("2") do |config|
       sudo systemctl start salt-master
 
       # Apply Salt states from project folder
-      sudo salt-call --local --file-root=/vagrant/Salt-Security-Lab-Project/salt state.apply
+      sudo salt-call --local --file-root=/vagrant/salt state.apply
     SHELL
   end
 
@@ -58,7 +58,7 @@ Vagrant.configure("2") do |config|
       sudo systemctl restart salt-minion
 
       # Apply Salt states from project folder
-      sudo salt-call --local --file-root=/vagrant/Salt-Security-Lab-Project/salt state.apply
+      sudo salt-call --local --file-root=/vagrant/salt state.apply
     SHELL
   end
 end
