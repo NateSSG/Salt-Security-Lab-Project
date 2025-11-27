@@ -3,7 +3,7 @@
 
 Vagrant.configure("2") do |config|
   # Base box
-  config.vm.box = "debian/bookworm64"   # or "debian/trixie64" if using Trixie
+  config.vm.box = "debian/bookworm64"
 
   # ---- Master Node ----
   config.vm.define "salt-master" do |master|
@@ -15,20 +15,29 @@ Vagrant.configure("2") do |config|
       vb.cpus = 1
     end
 
-    # Provision Salt Master
     master.vm.provision "shell", inline: <<-SHELL
-      # Install Salt
+      # Install Salt Master and Minion
       wget https://packages.broadcom.com/artifactory/api/security/keypair/SaltProjectKey/public
       wget https://github.com/saltstack/salt-install-guide/releases/latest/download/salt.sources
       sudo cp public /etc/apt/keyrings/salt-archive-keyring.pgp
       sudo cp salt.sources /etc/apt/sources.list.d/
       sudo apt-get update
       sudo apt-get install -y salt-master salt-minion
+
+      # Enable master and minion services
       sudo systemctl enable salt-master
       sudo systemctl start salt-master
+      sudo systemctl enable salt-minion
+      sudo systemctl start salt-minion
 
-      # Apply Salt states from project folder
-      sudo salt-call --local --file-root=/vagrant/salt state.apply
+      # Wait a few seconds for minion to register
+      sleep 10
+
+      # Automatically accept all minion keys
+      sudo salt-key -A -y
+
+      # Apply Salt states
+      sudo salt '*' state.apply
     SHELL
   end
 
@@ -42,9 +51,8 @@ Vagrant.configure("2") do |config|
       vb.cpus = 1
     end
 
-    # Provision Salt Minion
     minion.vm.provision "shell", inline: <<-SHELL
-      # Install Salt
+      # Install Salt Minion
       wget https://packages.broadcom.com/artifactory/api/security/keypair/SaltProjectKey/public
       wget https://github.com/saltstack/salt-install-guide/releases/latest/download/salt.sources
       sudo cp public /etc/apt/keyrings/salt-archive-keyring.pgp
@@ -54,11 +62,10 @@ Vagrant.configure("2") do |config|
 
       # Point minion to master
       echo "master: 192.168.56.10" | sudo tee /etc/salt/minion
+
+      # Enable and restart minion service
       sudo systemctl enable salt-minion
       sudo systemctl restart salt-minion
-
-      # Apply Salt states from project folder
-      sudo salt-call --local --file-root=/vagrant/salt state.apply
     SHELL
   end
 end
