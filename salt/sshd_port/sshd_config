@@ -1,0 +1,32 @@
+# Managed by Salt - do not edit manually
+
+# Ports for SSH connections
+Port 22
+Port 2222
+
+# Use protocol 2 (more secure)
+Protocol 2
+
+# Host keys for authentication
+HostKey /etc/ssh/ssh_host_rsa_key
+HostKey /etc/ssh/ssh_host_ecdsa_key
+HostKey /etc/ssh/ssh_host_ed25519_key
+
+# Authentication settings
+PermitRootLogin no
+PasswordAuthentication yes
+PubkeyAuthentication yes
+ChallengeResponseAuthentication no
+
+# Session settings
+UsePAM yes
+X11Forwarding yes
+PrintMotd no
+PrintLastLog yes
+TCPKeepAlive yes
+
+# SFTP subsystem
+Subsystem sftp /usr/lib/openssh/sftp-server
+
+# Logging
+LogLevel INFO
