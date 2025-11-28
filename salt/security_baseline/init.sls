@@ -1,4 +1,4 @@
-﻿# security_baseline/init.sls
+﻿# security_baseline/init.sls - FIXED VERSION
 
 # Install and configure fail2ban
 fail2ban:
@@ -34,14 +34,14 @@ ufw-init:
         ufw --force enable
     - unless: "ufw status | grep -q 'Status: active'"
 
-# Common security packages
+# LIGHTWEIGHT security packages (Option 4)
 security_packages:
   pkg.installed:
     - pkgs:
       - auditd
-      - aide
-      - rkhunter
-      - chkrootkit
+      - lynis          # Lightweight security scanner (replaces rkhunter)
+      - debsums        # Light file integrity checker (replaces aide)
+      # Removed: aide, rkhunter, chkrootkit (too heavy)
 
 # Enable auditd
 auditd:

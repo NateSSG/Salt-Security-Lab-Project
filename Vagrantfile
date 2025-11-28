@@ -63,7 +63,7 @@ Vagrant.configure("2") do |config|
       else
         echo "⚠️ No custom Salt states found, creating basic structure..."
         # Create a basic top.sls as fallback
-        cat << EOF | sudo tee /srv/salt/top.sls
+        cat << 'EOF' | sudo tee /srv/salt/top.sls
 base:
   '*':
     - sshd_port
@@ -80,8 +80,8 @@ EOF
     minion.vm.network "private_network", ip: "192.168.56.11"
 
     minion.vm.provider "virtualbox" do |vb|
-      vb.memory = 1024
-      vb.cpus = 1
+      vb.memory = 2048
+      vb.cpus = 2
     end
 
     minion.vm.provision "shell", inline: <<-SHELL
@@ -105,12 +105,25 @@ EOF
       sudo rm -rf /etc/salt/pki/minion/*
       sudo rm -rf /var/cache/salt/minion/
 
-      # COMPLETELY REPLACE the minion config file
-      cat << EOF | sudo tee /etc/salt/minion
+      # COMPLETELY REPLACE the minion config file WITH WORKING SETTINGS
+      cat << 'EOF' | sudo tee /etc/salt/minion
 master: 192.168.56.10
 id: salt-minion
 master_port: 4506
 master_tries: -1
+
+# Connection reliability settings (NO DUPLICATES!)
+return_retry_timer: 5
+return_retry_timer_max: 10
+auth_tries: 10
+auth_timeout: 10
+restart_on_error: True
+master_alive_interval: 10
+
+# Performance settings
+recon_default: 1000
+recon_max: 60000
+recon_randomize: True
 EOF
 
       echo "🔄 Waiting for network..."
@@ -137,20 +150,38 @@ Vagrant.configure("2") do |config|
     if command -v salt-key >/dev/null 2>&1; then
       echo "🔧 DEBUG: Detected Salt Master - Running automated setup..."
       
-      # SECURE: Only accept our specific minion, not all keys
-      echo "🔑 Waiting for specific minion key..."
+      # IMPROVED KEY HANDLING - Wait for stable key formation
+      echo "🔑 Waiting for minion key to be properly generated..."
       
+      key_found=false
       for i in {1..30}; do
         # Check if our specific minion key is present
         if sudo salt-key -L 2>/dev/null | grep "Unaccepted Keys" | grep -q "salt-minion"; then
-          echo "✅ Our minion key found - accepting securely..."
-          sudo salt-key -a salt-minion -y 2>/dev/null || true
-          break
+          echo "✅ Minion key detected - waiting for key stabilization..."
+          sleep 5  # Wait extra time for key to be fully formed
+          
+          # FORCE KEY REGENERATION to ensure it's clean
+          echo "🔄 Ensuring clean key exchange..."
+          sudo salt-key -d salt-minion -y 2>/dev/null || true
+          sleep 3
+          
+          # Wait for new key to be generated
+          echo "⏳ Waiting for new key generation..."
+          sleep 10
+          
+          # Accept the fresh key
+          if sudo salt-key -L 2>/dev/null | grep "Unaccepted Keys" | grep -q "salt-minion"; then
+            echo "✅ Accepting fresh minion key..."
+            sudo salt-key -a salt-minion -y 2>/dev/null || true
+            key_found=true
+            break
+          fi
         fi
         
-        # Also check if it's already accepted
+        # Also check if it's already accepted (from auto_accept)
         if sudo salt-key -L 2>/dev/null | grep "Accepted Keys" | grep -q "salt-minion"; then
-          echo "✅ Minion key already accepted!"
+          echo "✅ Minion key already accepted - testing communication..."
+          key_found=true
           break
         fi
         
@@ -158,22 +189,37 @@ Vagrant.configure("2") do |config|
         sleep 2
       done
 
+      if [ "$key_found" = false ]; then
+        echo "❌ Minion key not found after waiting - forcing reconnection..."
+        # Force minion to restart and regenerate key
+        sudo salt '*' cmd.run "sudo systemctl restart salt-minion" 2>/dev/null || true
+        sleep 10
+        sudo salt-key -A -y 2>/dev/null || true
+      fi
+
       # Wait for minion to connect and respond
       echo "📡 Testing minion connection..."
       
+      connection_working=false
       for i in {1..20}; do
         if sudo salt '*' test.ping 2>/dev/null | grep -q "True"; then
           echo "✅ Minion is connected and responsive!"
+          connection_working=true
           break
         fi
         echo "⏰ Testing connection... ($((i * 3)) seconds)"
         sleep 3
       done
 
-      # Apply states
-      echo "🚀 Applying Salt states automatically..."
-      sudo salt '*' state.apply
-      echo "🎉 FULLY AUTOMATED SETUP COMPLETED!"
+      if [ "$connection_working" = true ]; then
+        # Apply states
+        echo "🚀 Applying Salt states automatically..."
+        sudo salt '*' state.apply
+        echo "🎉 FULLY AUTOMATED SETUP COMPLETED!"
+      else
+        echo "⚠️ Master-minion communication failed - using salt-call fallback..."
+        sudo salt '*' cmd.run "sudo salt-call state.apply -l info" 2>/dev/null || echo "Fallback also failed"
+      fi
 
       echo ""
       echo "🔧 Final Status:"
