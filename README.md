@@ -1,5 +1,20 @@
 # 🛡️ Mini SIEM Saltstack Security Lab | Created By: Nathaniel Ssendagire & Janne Sormunen
 
+## 🔧 Key Technical Achievements
+- **Solved master-minion communication issues** with connection reliability settings
+- **Replaced heavy Filebeat** with lightweight rsyslog forwarding
+- **Optimized package selection** for stable SaltStack deployment
+- **Proven idempotent infrastructure** - states deploy reliably every time
+
+
+## 🎯 Educational Value
+
+Demonstrates modern infrastructure as code principles:
+- Centralized configuration management
+- Idempotent state deployment
+- Automated security tooling
+- SaltStack master-minion architecture
+
 ## 🚀 Quick Start
     # Deploy the entire lab
     vagrant destroy -f && vagrant up
@@ -96,7 +111,7 @@
     sudo useradd testuser 2>/dev/null || true
     
     # Check if Filebeat captured it
-    sudo tail -f /tmp/filebeat/filebeat.log-*.ndjson | grep -E "(ssh|useradd)"
+    sudo tail -f /var/log/siem-central.log | grep -E "(ssh|useradd)"
 
 ## 🗂️ File Locations
 
@@ -106,13 +121,15 @@
 
 - Fail2ban Config: /etc/fail2ban/jail.local
 
-- Filebeat Config: /etc/filebeat/filebeat.yml
+- Rsyslog Config: /etc/rsyslog.conf
+
+- SSH Config: /etc/ssh/sshd_config
 
 - Firewall Rules: sudo ufw status
 
 ### Log Files
 
-- Filebeat Output: /tmp/filebeat/filebeat.log-*.ndjson
+- Centralized Logs: /var/log/siem-central.log
 
 - Fail2ban Logs: /var/log/fail2ban.log
 
@@ -154,16 +171,18 @@
 
 ## 📋 Security Tools Inventory
 
-| Tool        | Purpose                   | Status Command                    |
-|-------------|----------------------------|-----------------------------------|
-| Fail2ban    | SSH brute force protection | sudo systemctl status fail2ban    |
-| UFW         | Network firewall           | sudo ufw status                   |
-| Filebeat    | Log collection             | sudo systemctl status filebeat    |
-| Lynis       | Security auditing          | sudo lynis show version           |
-| RKHunter    | Rootkit detection          | sudo rkhunter --versioncheck      |
-| AIDE        | File integrity             | sudo aide --version               |
-| Auditd      | System auditing            | sudo systemctl status auditd      |
-| htop/iotop  | System monitoring          | sudo htop                         |
+| Tool        | Purpose                     | Status Command                     |
+|-------------|------------------------------|------------------------------------|
+| Fail2ban    | SSH brute force protection   | sudo systemctl status fail2ban     |
+| UFW         | Network firewall             | sudo ufw status                    |
+| Rsyslog     | Centralized log collection   | sudo systemctl status rsyslog      |
+| Lynis       | Security auditing            | sudo lynis show version            |
+| RKHunter    | Rootkit detection            | sudo rkhunter --versioncheck       |
+| AIDE        | File integrity               | sudo aide --version                |
+| Auditd      | System auditing              | sudo systemctl status auditd       |
+| DebSums     | Package integrity            | sudo debsums --version             |
+| htop/iotop  | System monitoring            | sudo htop                          |
+
 
 
 ## 🚨 Emergency Commands
