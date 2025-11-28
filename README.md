@@ -22,6 +22,23 @@ Demonstrates modern infrastructure as code principles:
     # SSH into machines
     vagrant ssh salt-master
     vagrant ssh salt-minion
+
+    # Test basic master-minion communication
+    vagrant ssh salt-master -c "sudo salt '*' test.ping"
+    vagrant ssh salt-master -c "sudo salt '*' cmd.run 'echo hello'"
+
+    # Test full state application
+    vagrant ssh salt-master -c "sudo salt --timeout=180 '*' state.apply"
+
+    # Verify SIEM services are running
+    vagrant ssh salt-master -c "sudo salt '*' service.status fail2ban"
+    vagrant ssh salt-master -c "sudo salt '*' cmd.run 'ufw status'"
+    vagrant ssh salt-master -c "sudo salt '*' service.status auditd"
+    
+    # Test log collection
+    vagrant ssh salt-minion -c "sudo /usr/local/bin/siem-log-monitor.sh"
+
+    
     
 ## 🔍 Security Monitoring Commands
     # Quick health check (run on salt-master)
