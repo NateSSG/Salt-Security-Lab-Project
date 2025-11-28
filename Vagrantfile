@@ -139,7 +139,7 @@ EOF
   end
 end
 
-# ADD THIS SEPARATE CONFIG BLOCK - It runs AFTER all VM provisioning
+# It runs AFTER all VM provisioning
 Vagrant.configure("2") do |config|
   # ---- GLOBAL SETUP - Runs after BOTH VMs are created AND provisioned ----
   config.vm.provision "shell", run: "once", inline: <<-SHELL
