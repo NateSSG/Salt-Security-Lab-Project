@@ -127,7 +127,7 @@ Demonstrates modern infrastructure as code principles:
     sudo systemctl restart ssh
     sudo useradd testuser 2>/dev/null || true
     
-    # Check if Filebeat captured it
+    # Check system logs
     sudo tail -f /var/log/siem-central.log | grep -E "(ssh|useradd)"
 
 ## 🗂️ File Locations
