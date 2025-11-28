@@ -1,4 +1,4 @@
-# sshd_port/init.sls - CORRECT VERSION
+# sshd_port/init.sls 
 
 # Install OpenSSH server
 openssh-server:
