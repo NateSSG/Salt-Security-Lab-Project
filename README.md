@@ -16,7 +16,7 @@ https://github.com/user-attachments/assets/85cf383a-57c6-4c10-b39e-b9a2d03694bd
 
 ## Description
 
-- This project delivers complete SaltStack security automation with zero manual intervention. Simply clone the repository and ensure Vagrant is installed on your host machine, then in the project folder, run vagrant up to auto-provision master-minion infrastructure, handle key exchange automatically, configure Salt services, and deploy a fully functional security stack. Once deployed, execute vagrant ssh salt-master -c "sudo salt --timeout=180 '*' state.apply" to apply all security configurations across your entire infrastructure..
+- This project delivers complete SaltStack security automation with zero manual intervention. Simply clone the repository and ensure Vagrant is installed on your host machine, then in the project folder, run vagrant up to auto-provision master-minion infrastructure, handle key exchange automatically, configure Salt services, and deploy a fully functional security stack. Once deployed, execute vagrant ssh salt-master -c "sudo salt --timeout=180 '*' state.apply" to apply all security configurations across your entire infrastructure.
 
 
 
