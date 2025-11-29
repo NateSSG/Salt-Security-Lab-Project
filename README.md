@@ -5,6 +5,10 @@
 https://github.com/user-attachments/assets/3c15c0af-e32b-42d3-a816-4d89b63849d0
 
 
+<img width="1399" height="391" alt="salt minion master " src="https://github.com/user-attachments/assets/4e279e98-fdb1-4c88-87c9-75eccf2d53a4" />
+
+
+
 
  ## JUST 2 COMMANDS TO ENTERPRISE SECURITY:
 
