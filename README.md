@@ -1,6 +1,6 @@
 # 🛡️ Mini SIEM Saltstack Security Lab | Created By: Nathaniel Ssendagire & Janne Sormunen
 
- ## JUST 3 COMMANDS TO ENTERPRISE SECURITY:
+ ## JUST 2 COMMANDS TO ENTERPRISE SECURITY:
 
     vagrant up 
     vagrant ssh salt-master -c "sudo salt --timeout=180 '*' state.apply"
