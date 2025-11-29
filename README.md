@@ -1,5 +1,11 @@
 # 🛡️ Mini SIEM Saltstack Security Lab | Created By: Nathaniel Ssendagire & Janne Sormunen
 
+
+
+https://github.com/user-attachments/assets/3c15c0af-e32b-42d3-a816-4d89b63849d0
+
+
+
  ## JUST 2 COMMANDS TO ENTERPRISE SECURITY:
 
     vagrant up 
