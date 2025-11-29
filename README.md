@@ -2,9 +2,8 @@
 
  ## JUST 3 COMMANDS TO ENTERPRISE SECURITY:
 
-    vagrant up
-    vagrant ssh salt-master  
-    sudo salt '*' state.apply
+    vagrant up 
+    vagrant ssh salt-master -c "sudo salt --timeout=180 '*' state.apply"
 
 ## ✨ WATCH THE MAGIC HAPPEN:
 
