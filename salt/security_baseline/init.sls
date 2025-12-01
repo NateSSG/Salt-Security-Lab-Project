@@ -34,7 +34,7 @@ ufw-init:
         ufw --force enable
     - unless: "ufw status | grep -q 'Status: active'"
 
-# LIGHTWEIGHT security packages (Option 4)
+# LIGHTWEIGHT security packages
 security_packages:
   pkg.installed:
     - pkgs:
