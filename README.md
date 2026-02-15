@@ -1,4 +1,4 @@
-# 🛡️ Mini SIEM Saltstack Security Lab | Created By: Nathaniel Ssendagire & Janne Sormunen
+# 🛡️ Mini SIEM Saltstack Security Lab | Created By: Nathaniel Ssendagire
 
 
 
