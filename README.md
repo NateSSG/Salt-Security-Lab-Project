@@ -34,7 +34,7 @@ https://github.com/user-attachments/assets/85cf383a-57c6-4c10-b39e-b9a2d03694bd
 - **Proven idempotent infrastructure** - states deploy reliably every time
 
 
-## 🎯 Educational Value
+## Educational Value
 
 Demonstrates modern infrastructure as code principles:
 - Centralized configuration management
@@ -42,7 +42,7 @@ Demonstrates modern infrastructure as code principles:
 - Automated security tooling
 - SaltStack master-minion architecture
 
-## 🚀 Quick Start
+## Quick Start
     # Deploy the entire lab
     vagrant destroy -f && vagrant up
     
@@ -67,7 +67,7 @@ Demonstrates modern infrastructure as code principles:
 
     
     
-## 🔍 Security Monitoring Commands
+## Security Monitoring Commands
     # Quick health check (run on salt-master)
     sudo salt '*' state.apply test=true
     sudo salt '*' test.ping
@@ -79,7 +79,7 @@ Demonstrates modern infrastructure as code principles:
     sudo salt '*' cmd.run "systemctl is-active filebeat && echo '✅ Filebeat'" && \
     sudo salt '*' cmd.run "ufw status | head -5"
 
-## 📊 Log Collection & Monitoring
+## Log Collection & Monitoring
 
     # Check Filebeat logs (on salt-minion)
     sudo tail -f /tmp/filebeat/filebeat.log-*.ndjson
@@ -92,7 +92,7 @@ Demonstrates modern infrastructure as code principles:
     sudo ls -la /tmp/filebeat/
     sudo wc -l /tmp/filebeat/filebeat.log-*.ndjson
 
-## 🔒 Intrusion Detection (Fail2ban)
+## Intrusion Detection (Fail2ban)
 
     # Check Fail2ban status
     sudo fail2ban-client status
@@ -104,7 +104,7 @@ Demonstrates modern infrastructure as code principles:
     # Unban an IP (if needed)
     sudo fail2ban-client set sshd unbanip IP_ADDRESS
 
-🌐 Firewall Status (UFW)
+ Firewall Status (UFW)
 
     # Check firewall rules
     sudo ufw status
@@ -113,7 +113,7 @@ Demonstrates modern infrastructure as code principles:
     # Check active connections
     sudo netstat -tulpn | grep -E ':(22|2222|4505|4506)'
 
-## 🔍 Security Scanning Tools
+## Security Scanning Tools
 
     # Run security audit
     sudo lynis audit system --quick
@@ -125,7 +125,7 @@ Demonstrates modern infrastructure as code principles:
     # File integrity check
     sudo aide --check
 
-## 📈 System Monitoring
+## System Monitoring
 
     # Real-time system monitoring
     sudo htop
@@ -138,7 +138,7 @@ Demonstrates modern infrastructure as code principles:
     # Log analysis
     sudo logwatch --range today
 
-## 🧪 Testing Security Features
+## Testing Security Features
 
 ### Test Fail2ban Protection
 
@@ -157,7 +157,7 @@ Demonstrates modern infrastructure as code principles:
     # Check system logs
     sudo tail -f /var/log/siem-central.log | grep -E "(ssh|useradd)"
 
-## 🗂️ File Locations
+## File Locations
 
 ### Configuration Files
 
@@ -213,7 +213,7 @@ Demonstrates modern infrastructure as code principles:
     sudo tail -f /var/log/auth.log
     sudo tail -f /var/log/syslog
 
-## 📋 Security Tools Inventory
+## Security Tools Inventory
 
 | Tool        | Purpose                     | Status Command                     |
 |-------------|------------------------------|------------------------------------|
@@ -229,7 +229,7 @@ Demonstrates modern infrastructure as code principles:
 
 
 
-## 🚨 Emergency Commands
+## Emergency Commands
 
     # Block an IP immediately
     sudo ufw deny from IP_ADDRESS
