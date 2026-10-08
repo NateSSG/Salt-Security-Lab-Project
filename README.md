@@ -1,4 +1,4 @@
-# 🛡️ Mini SIEM Saltstack Security Lab | Created By: Nathaniel Ssendagire
+# Mini SIEM Saltstack Security Lab | Created By: Nathaniel Ssendagire
 
 
 
@@ -27,7 +27,7 @@ https://github.com/user-attachments/assets/85cf383a-57c6-4c10-b39e-b9a2d03694bd
     vagrant up 
     vagrant ssh salt-master -c "sudo salt --timeout=180 '*' state.apply"
 
-## 🔧 Key Technical Achievements
+## Key Technical Achievements
 - **Solved master-minion communication issues** with connection reliability settings
 - **Replaced heavy Filebeat** with lightweight rsyslog forwarding
 - **Optimized package selection** for stable SaltStack deployment
